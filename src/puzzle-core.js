@@ -70,8 +70,8 @@ export function getFittedGridGeometry(width, height, columns, rows, aspectRatio)
   }
 
   const isCompactBoard = width < 700;
-  const availableWidth = width * (isCompactBoard ? 0.84 : 0.56);
-  const availableHeight = height * (isCompactBoard ? 0.62 : 0.9);
+  const availableWidth = width * (isCompactBoard ? 0.8 : 0.56);
+  const availableHeight = height * (isCompactBoard ? 0.42 : 0.9);
   const targetWidth = Math.min(availableWidth, availableHeight * aspectRatio);
   const targetHeight = targetWidth / aspectRatio;
 
@@ -81,7 +81,7 @@ export function getFittedGridGeometry(width, height, columns, rows, aspectRatio)
     targetWidth,
     targetHeight,
     left: isCompactBoard ? (width - targetWidth) / 2 : Math.max(24, width * 0.05),
-    top: (height - targetHeight) / 2
+    top: isCompactBoard ? 24 : (height - targetHeight) / 2
   };
 }
 

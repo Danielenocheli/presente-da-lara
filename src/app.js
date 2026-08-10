@@ -254,6 +254,7 @@ function getScatterPositions(width, height, geometry) {
   const padding = Math.max(14, Math.min(geometry.cellWidth, geometry.cellHeight) * 0.28);
   const gapX = Math.max(8, geometry.cellWidth * 0.34);
   const gapY = Math.max(8, geometry.cellHeight * 0.13);
+  const isCompactBoard = width < 700;
   const protectedArea = {
     left: geometry.left - padding,
     top: geometry.top - padding,
@@ -262,10 +263,29 @@ function getScatterPositions(width, height, geometry) {
   };
   const positions = [];
 
-  const trayLeft = Math.max(protectedArea.right, padding);
+  const trayLeft = isCompactBoard ? padding : Math.max(protectedArea.right, padding);
+  const trayRight = isCompactBoard ? width - padding : width - padding;
+  const trayWidth = trayRight - trayLeft;
+  const columns = Math.max(1, Math.floor((trayWidth + gapX) / (geometry.cellWidth + gapX)));
+  const rowWidth = columns * geometry.cellWidth + (columns - 1) * gapX;
+  const rowStart = isCompactBoard
+    ? (width - rowWidth) / 2
+    : trayLeft + Math.max(0, (trayWidth - rowWidth) / 2);
+  const total = grid.columns * grid.rows;
+  const rows = Math.ceil(total / columns);
+  const trayTop = isCompactBoard
+    ? geometry.top + geometry.targetHeight + padding
+    : padding + Math.max(0, (height - padding * 2 - rows * geometry.cellHeight - (rows - 1) * gapY) / 2);
 
-  for (let top = padding; top <= height - geometry.cellHeight - padding; top += geometry.cellHeight + gapY) {
-    for (let left = trayLeft; left <= width - geometry.cellWidth - padding; left += geometry.cellWidth + gapX) {
+  for (let row = 0; row < rows; row += 1) {
+    for (let column = 0; column < columns; column += 1) {
+      const top = trayTop + row * (geometry.cellHeight + gapY);
+      const left = rowStart + column * (geometry.cellWidth + gapX);
+
+      if (top > height - geometry.cellHeight - padding) {
+        continue;
+      }
+
       positions.push({ left, top });
     }
   }

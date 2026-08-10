@@ -773,7 +773,7 @@ body.puzzle-fullscreen-active {
   }
 
   .board-frame {
-    height: min(590px, calc(100vh - 232px));
+    height: 800px;
     border-radius: 12px;
   }
 
