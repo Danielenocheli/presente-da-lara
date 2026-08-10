@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   createOrderedPieces,
+  getFittedGridGeometry,
   getPiecePosition,
   getProgress,
   isSolved,
@@ -18,6 +19,12 @@ assert.equal(createOrderedPieces(200).length, 200);
 assert.deepEqual(createOrderedPieces(100).slice(-3), [97, 98, 99]);
 assert.deepEqual(getPiecePosition(17, 15, 10), { row: 1, column: 2 });
 assert.equal(getProgress([0, 2, 1, 3]), 50);
+
+const geometry = getFittedGridGeometry(1000, 700, 10, 5, 1080 / 1154);
+assert.equal(Math.round(geometry.targetWidth / geometry.targetHeight * 10000), 9359);
+assert.equal(geometry.cellWidth * 10, geometry.targetWidth);
+assert.equal(geometry.cellHeight * 5, geometry.targetHeight);
+assert.throws(() => getFittedGridGeometry(0, 700, 10, 5, 1), RangeError);
 
 const shuffled = shufflePieces(100, () => 0);
 assert.equal(shuffled.length, 100);

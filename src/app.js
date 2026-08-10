@@ -1,4 +1,4 @@
-import { getPiecePosition } from "./puzzle-core.js";
+import { getFittedGridGeometry, getPiecePosition } from "./puzzle-core.js";
 
 const board = document.querySelector("#board");
 const backLink = document.querySelector(".back-link");
@@ -16,6 +16,7 @@ const gameStatus = document.querySelector("#game-status");
 const celebration = document.querySelector("#celebration");
 const pieceFeedback = document.querySelector("#piece-feedback");
 const demoMode = new URLSearchParams(window.location.search).get("demo");
+const photoAspectRatio = 1080 / 1154;
 
 const difficultySettings = {
   "50": { columns: 10, rows: 5 },
@@ -69,6 +70,8 @@ function renderBoard() {
   board.style.setProperty("--target-top", `${geometry.top}px`);
   board.style.setProperty("--target-width", `${geometry.targetWidth}px`);
   board.style.setProperty("--target-height", `${geometry.targetHeight}px`);
+  board.style.setProperty("--grid-columns", String(grid.columns));
+  board.style.setProperty("--grid-rows", String(grid.rows));
 
   board.querySelectorAll(".piece").forEach((piece) => piece.remove());
 
@@ -76,19 +79,19 @@ function renderBoard() {
     const piece = document.createElement("button");
     const source = getPiecePosition(pieceState.id, grid.columns, grid.rows);
     const target = getTargetPosition(pieceState.id, geometry);
-    const left = pieceState.locked ? target.x : pieceState.x * width - geometry.cellSize / 2;
-    const top = pieceState.locked ? target.y : pieceState.y * height - geometry.cellSize / 2;
+    const left = pieceState.locked ? target.x : pieceState.x * width - geometry.cellWidth / 2;
+    const top = pieceState.locked ? target.y : pieceState.y * height - geometry.cellHeight / 2;
 
     piece.className = `piece shape-${pieceState.id % 4}`;
     piece.type = "button";
     piece.dataset.id = String(pieceState.id);
     piece.disabled = pieceState.locked;
-    piece.style.width = `${geometry.cellSize}px`;
-    piece.style.height = `${geometry.cellSize}px`;
-    piece.style.left = `${clamp(left, 0, width - geometry.cellSize)}px`;
-    piece.style.top = `${clamp(top, 0, height - geometry.cellSize)}px`;
+    piece.style.width = `${geometry.cellWidth}px`;
+    piece.style.height = `${geometry.cellHeight}px`;
+    piece.style.left = `${clamp(left, 0, width - geometry.cellWidth)}px`;
+    piece.style.top = `${clamp(top, 0, height - geometry.cellHeight)}px`;
     piece.style.backgroundSize = `${geometry.targetWidth}px ${geometry.targetHeight}px`;
-    piece.style.backgroundPosition = `${-source.column * geometry.cellSize}px ${-source.row * geometry.cellSize}px`;
+    piece.style.backgroundPosition = `${-source.column * geometry.cellWidth}px ${-source.row * geometry.cellHeight}px`;
     piece.style.setProperty("--scatter-rotation", `${pieceState.locked ? 0 : seededRotation(pieceState.id)}deg`);
     piece.setAttribute(
       "aria-label",
@@ -144,12 +147,13 @@ function dragPiece(event) {
 
   const bounds = board.getBoundingClientRect();
   const pieceState = pieces.find((piece) => piece.id === activeDrag.id);
-  const size = activeDrag.element.offsetWidth;
-  const left = clamp(event.clientX - bounds.left - activeDrag.offsetX, 0, bounds.width - size);
-  const top = clamp(event.clientY - bounds.top - activeDrag.offsetY, 0, bounds.height - size);
+  const pieceWidth = activeDrag.element.offsetWidth;
+  const pieceHeight = activeDrag.element.offsetHeight;
+  const left = clamp(event.clientX - bounds.left - activeDrag.offsetX, 0, bounds.width - pieceWidth);
+  const top = clamp(event.clientY - bounds.top - activeDrag.offsetY, 0, bounds.height - pieceHeight);
 
-  pieceState.x = (left + size / 2) / bounds.width;
-  pieceState.y = (top + size / 2) / bounds.height;
+  pieceState.x = (left + pieceWidth / 2) / bounds.width;
+  pieceState.y = (top + pieceHeight / 2) / bounds.height;
   activeDrag.element.style.left = `${left}px`;
   activeDrag.element.style.top = `${top}px`;
   activeDrag.element.style.setProperty("--scatter-rotation", "0deg");
@@ -166,9 +170,10 @@ function finishDrag(event) {
   const target = getTargetPosition(pieceState.id, geometry);
   const centerX = pieceState.x * board.clientWidth;
   const centerY = pieceState.y * board.clientHeight;
-  const targetCenterX = target.x + geometry.cellSize / 2;
-  const targetCenterY = target.y + geometry.cellSize / 2;
-  const distance = Math.hypot(centerX - targetCenterX, centerY - targetCenterY);
+  const targetCenterX = target.x + geometry.cellWidth / 2;
+  const targetCenterY = target.y + geometry.cellHeight / 2;
+  const distanceX = Math.abs(centerX - targetCenterX);
+  const distanceY = Math.abs(centerY - targetCenterY);
 
   drag.element.releasePointerCapture?.(event.pointerId);
   drag.element.removeEventListener("pointermove", dragPiece);
@@ -182,7 +187,10 @@ function finishDrag(event) {
     moves += 1;
   }
 
-  if (distance <= Math.max(22, geometry.cellSize * 0.62)) {
+  if (
+    distanceX <= Math.max(12, geometry.cellWidth * 0.58) &&
+    distanceY <= Math.max(12, geometry.cellHeight * 0.58)
+  ) {
     pieceState.locked = true;
     drag.element.classList.add("just-placed");
     showPieceFeedback();
@@ -232,24 +240,14 @@ function restartGame() {
 }
 
 function getGeometry(width, height) {
-  const cellSize = Math.max(18, Math.min(width * 0.84 / grid.columns, height * 0.72 / grid.rows));
-  const targetWidth = cellSize * grid.columns;
-  const targetHeight = cellSize * grid.rows;
-
-  return {
-    cellSize,
-    targetWidth,
-    targetHeight,
-    left: (width - targetWidth) / 2,
-    top: (height - targetHeight) / 2
-  };
+  return getFittedGridGeometry(width, height, grid.columns, grid.rows, photoAspectRatio);
 }
 
 function getTargetPosition(id, geometry) {
   const { row, column } = getPiecePosition(id, grid.columns, grid.rows);
   return {
-    x: geometry.left + column * geometry.cellSize,
-    y: geometry.top + row * geometry.cellSize
+    x: geometry.left + column * geometry.cellWidth,
+    y: geometry.top + row * geometry.cellHeight
   };
 }
 

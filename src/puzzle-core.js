@@ -62,6 +62,28 @@ export function getPiecePosition(pieceIndex, columns, rows) {
   };
 }
 
+export function getFittedGridGeometry(width, height, columns, rows, aspectRatio) {
+  validateGrid(columns, rows);
+
+  if (![width, height, aspectRatio].every(Number.isFinite) || width <= 0 || height <= 0 || aspectRatio <= 0) {
+    throw new RangeError("dimensoes do tabuleiro invalidas.");
+  }
+
+  const availableWidth = width * 0.84;
+  const availableHeight = height * 0.72;
+  const targetWidth = Math.min(availableWidth, availableHeight * aspectRatio);
+  const targetHeight = targetWidth / aspectRatio;
+
+  return {
+    cellWidth: targetWidth / columns,
+    cellHeight: targetHeight / rows,
+    targetWidth,
+    targetHeight,
+    left: (width - targetWidth) / 2,
+    top: (height - targetHeight) / 2
+  };
+}
+
 function validateTotalPieces(totalPieces) {
   if (!Number.isInteger(totalPieces) || totalPieces < 4 || totalPieces > 400) {
     throw new RangeError("a quantidade de pecas deve estar entre 4 e 400.");
