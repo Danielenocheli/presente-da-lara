@@ -819,28 +819,6 @@ body.puzzle-fullscreen-active {
   box-shadow: var(--shadow);
 }
 
-.gift-badge {
-  position: static;
-  margin: 0;
-  padding: 8px 16px;
-  border: 2px solid var(--rose);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 7px 18px rgba(16, 24, 40, 0.06);
-  transform: none;
-  white-space: nowrap;
-}
-
-.gift-footer {
-  position: absolute;
-  right: 0;
-  bottom: 14px;
-  left: 0;
-  z-index: 8;
-  display: flex;
-  justify-content: center;
-}
-
 .gift-experience::after {
   content: "";
   position: absolute;
@@ -1464,15 +1442,6 @@ body.puzzle-fullscreen-active {
 @media (max-width: 480px) {
   .gift-main {
     width: calc(100% - 24px);
-  }
-
-  .gift-badge {
-    padding: 6px 11px;
-    font-size: 11px;
-  }
-
-  .gift-footer {
-    bottom: 7px;
   }
 
   .gift-intro h1 {
