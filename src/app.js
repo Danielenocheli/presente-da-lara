@@ -34,22 +34,15 @@ let renderFrame = null;
 
 function createPieces() {
   const total = grid.columns * grid.rows;
-  const scatterColumns = Math.ceil(Math.sqrt(total * 1.55));
-  const scatterRows = Math.ceil(total / scatterColumns);
   const slots = Array.from({ length: total }, (_, index) => index);
   shuffleInPlace(slots);
 
   return Array.from({ length: total }, (_, id) => {
-    const slot = slots[id];
-    const column = slot % scatterColumns;
-    const row = Math.floor(slot / scatterColumns);
-    const jitterX = seededOffset(id, 17);
-    const jitterY = seededOffset(id, 41);
-
     return {
       id,
-      x: clamp((column + 0.5 + jitterX) / scatterColumns, 0.045, 0.955),
-      y: clamp((row + 0.5 + jitterY) / scatterRows, 0.065, 0.935),
+      x: 0,
+      y: 0,
+      scatterSlot: slots[id],
       locked: demoMode === "complete"
     };
   });
@@ -71,6 +64,7 @@ function renderBoard() {
   board.style.setProperty("--target-height", `${geometry.targetHeight}px`);
   board.style.setProperty("--grid-columns", String(grid.columns));
   board.style.setProperty("--grid-rows", String(grid.rows));
+  const scatterPositions = getScatterPositions(width, height, geometry);
 
   board.querySelectorAll(".piece").forEach((piece) => piece.remove());
 
@@ -78,8 +72,14 @@ function renderBoard() {
     const piece = document.createElement("button");
     const source = getPiecePosition(pieceState.id, grid.columns, grid.rows);
     const target = getTargetPosition(pieceState.id, geometry);
-    const left = pieceState.locked ? target.x : pieceState.x * width - geometry.cellWidth / 2;
-    const top = pieceState.locked ? target.y : pieceState.y * height - geometry.cellHeight / 2;
+    const scatterPosition = scatterPositions[pieceState.scatterSlot % scatterPositions.length];
+    const left = pieceState.locked ? target.x : scatterPosition.left;
+    const top = pieceState.locked ? target.y : scatterPosition.top;
+
+    if (!pieceState.locked) {
+      pieceState.x = (left + geometry.cellWidth / 2) / width;
+      pieceState.y = (top + geometry.cellHeight / 2) / height;
+    }
 
     piece.className = `piece shape-${pieceState.id % 4}`;
     piece.type = "button";
@@ -248,6 +248,36 @@ function getTargetPosition(id, geometry) {
     x: geometry.left + column * geometry.cellWidth,
     y: geometry.top + row * geometry.cellHeight
   };
+}
+
+function getScatterPositions(width, height, geometry) {
+  const padding = Math.max(14, Math.min(geometry.cellWidth, geometry.cellHeight) * 0.28);
+  const gapX = Math.max(8, geometry.cellWidth * 0.34);
+  const gapY = Math.max(8, geometry.cellHeight * 0.13);
+  const protectedArea = {
+    left: geometry.left - padding,
+    top: geometry.top - padding,
+    right: geometry.left + geometry.targetWidth + padding,
+    bottom: geometry.top + geometry.targetHeight + padding
+  };
+  const positions = [];
+
+  for (let top = padding; top <= height - geometry.cellHeight - padding; top += geometry.cellHeight + gapY) {
+    for (let left = padding; left <= width - geometry.cellWidth - padding; left += geometry.cellWidth + gapX) {
+      const right = left + geometry.cellWidth;
+      const bottom = top + geometry.cellHeight;
+      const overlapsGrid = right > protectedArea.left
+        && left < protectedArea.right
+        && bottom > protectedArea.top
+        && top < protectedArea.bottom;
+
+      if (!overlapsGrid) {
+        positions.push({ left, top });
+      }
+    }
+  }
+
+  return positions.length > 0 ? positions : [{ left: padding, top: padding }];
 }
 
 function updateStats() {

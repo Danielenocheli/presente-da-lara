@@ -69,8 +69,9 @@ export function getFittedGridGeometry(width, height, columns, rows, aspectRatio)
     throw new RangeError("dimensoes do tabuleiro invalidas.");
   }
 
-  const availableWidth = width * 0.84;
-  const availableHeight = height * 0.72;
+  const isCompactBoard = width < 700;
+  const availableWidth = width * (isCompactBoard ? 0.84 : 0.56);
+  const availableHeight = height * (isCompactBoard ? 0.62 : 0.9);
   const targetWidth = Math.min(availableWidth, availableHeight * aspectRatio);
   const targetHeight = targetWidth / aspectRatio;
 
