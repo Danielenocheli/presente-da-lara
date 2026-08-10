@@ -41,4 +41,6 @@ http://127.0.0.1:4173
 npm test
 ```
 
+Os cenários funcionais, responsivos, de acessibilidade, segurança e deploy estão documentados em [docs/cenarios-de-testes.md](docs/cenarios-de-testes.md).
+
 As capturas reais das telas ficam em `docs/wireframes-imagens`.
