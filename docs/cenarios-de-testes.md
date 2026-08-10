@@ -25,10 +25,10 @@ Validar o fluxo do presente da Lara, a tela do quebra-cabeça, as dificuldades d
 | --- | --- | --- | --- | --- |
 | CT-001 | Abrir a tela inicial | Acessar a URL do presente | A página abre sem erro e o presente começa fechado | P0 |
 | CT-002 | Abrir o presente | Clicar em `Abrir presente` | A tampa anima uma vez e a carta aparece | P0 |
-| CT-003 | Evitar clique duplicado | Clicar várias vezes durante a animação | Apenas uma abertura ocorre e não há estado duplicado | P1 |
+| CT-003 | Evitar clique duplicado | Clicar várias vezes durante a animação | Apenas uma abertura ocorre, o botão fica desabilitado/oculto e não há estado duplicado | P1 |
 | CT-004 | Validar a carta | Ler o texto após abrir | A mensagem da Lara aparece completa e sem alteração | P0 |
 | CT-005 | Continuar para o jogo | Clicar em `Continuar` | O usuário é levado para `jogo.html` | P0 |
-| CT-006 | Voltar da apresentação | Clicar em `Voltar` | O navegador retorna sem erro ou volta para a página inicial | P1 |
+| CT-006 | Voltar da apresentação | Clicar em `Voltar` | O navegador retorna sem erro para `index.html` ou para a raiz da apresentação | P1 |
 
 ## Cabeçalho e Controles
 
@@ -42,7 +42,7 @@ Validar o fluxo do presente da Lara, a tela do quebra-cabeça, as dificuldades d
 | CT-012 | Mostrar foto | Clicar em `Ver foto` | A foto-guia aparece sem impedir o arraste das peças | P1 |
 | CT-013 | Esconder foto | Clicar novamente em `Esconder foto` | A foto-guia desaparece e a grade continua disponível | P1 |
 | CT-014 | Tela cheia | Clicar no botão de tela cheia | Somente a área do quebra-cabeça ocupa a tela; os demais elementos da aplicação ficam ocultos | P1 |
-| CT-015 | Sair da tela cheia | Clicar novamente ou usar `Esc` | A tela retorna ao estado normal sem perder as peças | P1 |
+| CT-015 | Sair da tela cheia | Pressionar `Esc` após entrar em tela cheia | A tela retorna ao estado normal sem perder as peças | P1 |
 
 ## Montagem e Regras do Jogo
 

@@ -396,36 +396,26 @@ backLink.addEventListener("click", (event) => {
   }
 });
 
-fullscreenButton.addEventListener("click", async () => {
-  const fallbackActive = fullscreenPuzzle.classList.contains("is-puzzle-fullscreen");
+fullscreenButton.addEventListener("click", () => {
+  const isActive = fullscreenPuzzle.classList.contains("is-puzzle-fullscreen");
+  fullscreenPuzzle.classList.toggle("is-puzzle-fullscreen", !isActive);
+  updateFullscreenButton();
+});
 
-  try {
-    if (!document.fullscreenElement && !fallbackActive) {
-      await fullscreenPuzzle.requestFullscreen();
-    } else if (document.fullscreenElement) {
-      await document.exitFullscreen();
-    } else {
-      fullscreenPuzzle.classList.remove("is-puzzle-fullscreen");
-    }
-  } catch {
-    fullscreenPuzzle.classList.toggle("is-puzzle-fullscreen");
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && fullscreenPuzzle.classList.contains("is-puzzle-fullscreen")) {
+    fullscreenPuzzle.classList.remove("is-puzzle-fullscreen");
+    updateFullscreenButton();
   }
-
-  updateFullscreenButton();
 });
 
-document.addEventListener("fullscreenchange", () => {
-  updateFullscreenButton();
-  window.requestAnimationFrame(renderBoard);
-});
 window.addEventListener("resize", () => {
   window.cancelAnimationFrame(renderFrame);
   renderFrame = window.requestAnimationFrame(renderBoard);
 });
 
 function updateFullscreenButton() {
-  const fallbackActive = fullscreenPuzzle.classList.contains("is-puzzle-fullscreen");
-  const isFullscreen = document.fullscreenElement === fullscreenPuzzle || fallbackActive;
+  const isFullscreen = fullscreenPuzzle.classList.contains("is-puzzle-fullscreen");
   document.body.classList.toggle("puzzle-fullscreen-active", isFullscreen);
   fullscreenButton.querySelector("span").textContent = isFullscreen ? "↙" : "⛶";
   fullscreenButton.setAttribute("aria-label", isFullscreen ? "Sair da tela cheia" : "Ativar tela cheia");
