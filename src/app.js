@@ -6,7 +6,6 @@ const difficulty = document.querySelector("#difficulty");
 const shuffleButton = document.querySelector("#shuffle");
 const undoButton = document.querySelector("#undo");
 const hintButton = document.querySelector("#hint");
-const hintBoardButton = document.querySelector("#hint-board");
 const fullscreenButton = document.querySelector("#fullscreen");
 const fullscreenPuzzle = document.querySelector(".board-card");
 const movesElement = document.querySelector("#moves");
@@ -292,8 +291,10 @@ function showCompletedState() {
 }
 
 function setHintState(isVisible) {
-  hintButton.querySelector("strong").textContent = isVisible ? "Esconder foto completa" : "Mostrar foto completa";
-  hintBoardButton.firstChild.textContent = isVisible ? "Esconder foto completa " : "Ver foto completa ";
+  const label = hintButton.querySelector(".button-label");
+  const nextLabel = isVisible ? "Esconder foto" : "Ver foto";
+  label.textContent = nextLabel;
+  hintButton.setAttribute("aria-label", `${nextLabel} completa`);
 }
 
 function setDefaultHint() {
@@ -327,7 +328,6 @@ function clamp(value, minimum, maximum) {
 shuffleButton.addEventListener("click", restartGame);
 difficulty.addEventListener("change", restartGame);
 hintButton.addEventListener("click", toggleHint);
-hintBoardButton.addEventListener("click", toggleHint);
 
 undoButton.addEventListener("click", () => {
   if (!previousPieces) {

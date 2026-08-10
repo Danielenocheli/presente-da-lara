@@ -71,10 +71,11 @@ button {
 }
 
 .topbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   min-height: 94px;
   align-items: center;
-  justify-content: space-between;
+  gap: 22px;
   padding: 14px 39px 14px 42px;
   border-bottom: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.55);
@@ -99,6 +100,76 @@ button {
 .stats {
   display: flex;
   gap: 18px;
+}
+
+.header-controls {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.header-select {
+  position: relative;
+  width: 118px;
+}
+
+.header-select .mini-puzzle {
+  left: 12px;
+}
+
+.header-select select {
+  min-height: 42px;
+  padding: 0 25px 0 34px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.header-button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 13px;
+  border: 1px solid rgba(0, 124, 116, 0.48);
+  border-radius: 5px;
+  background: #fff;
+  color: var(--teal-dark);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.header-button > span:first-child {
+  font-size: 17px;
+}
+
+.header-button:hover,
+.header-button:focus-visible {
+  border-color: var(--teal);
+  background: #f4fbfa;
+}
+
+.header-button-primary {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #fff;
+}
+
+.header-button-primary:hover,
+.header-button-primary:focus-visible {
+  background: var(--teal-dark);
+}
+
+.header-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.header-icon-button {
+  width: 42px;
+  padding: 0;
 }
 
 .stat-card {
@@ -163,10 +234,8 @@ button {
 
 .game-layout {
   display: grid;
-  grid-template-columns: 420px minmax(0, 1fr);
-  gap: 55px;
-  align-items: start;
-  padding: 33px 39px 27px 52px;
+  gap: 12px;
+  padding: 24px 30px 28px;
 }
 
 .side-column {
@@ -343,7 +412,7 @@ select {
 
 .board-card {
   min-width: 0;
-  padding: 26px 25px 21px;
+  padding: 18px;
 }
 
 .board-card-header {
@@ -402,11 +471,20 @@ select {
 .board-frame {
   position: relative;
   min-width: 0;
-  height: 674px;
+  height: min(720px, calc(100vh - 190px));
   overflow: visible;
   border: 2px dashed var(--dash);
   border-radius: 17px;
   background: #fbfcfd;
+}
+
+.game-status {
+  min-height: 19px;
+  margin: 0;
+  color: var(--teal-dark);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: center;
 }
 
 .board-card:fullscreen,
@@ -618,43 +696,25 @@ body.puzzle-fullscreen-active {
 }
 
 @media (min-width: 1460px) {
-  .game-layout {
-    grid-template-columns: 420px minmax(0, 1fr);
-  }
-
   .board-frame {
-    height: 674px;
+    height: min(740px, calc(100vh - 190px));
   }
 }
 
 @media (max-width: 1180px) {
-  .game-layout {
-    grid-template-columns: 360px minmax(0, 1fr);
-    gap: 30px;
-    padding-inline: 30px;
+  .topbar {
+    grid-template-columns: auto 1fr;
   }
 
-  h1 {
-    font-size: 40px;
-  }
-
-  .board-frame {
-    height: 590px;
+  .header-controls {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 }
 
 @media (max-width: 900px) {
-  .game-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .side-column {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
-
   .board-frame {
-    height: min(680px, 78vw);
+    height: min(680px, calc(100vh - 238px));
   }
 }
 
@@ -666,8 +726,7 @@ body.puzzle-fullscreen-active {
 
   .topbar {
     min-height: 0;
-    align-items: flex-start;
-    gap: 14px;
+    gap: 12px;
     padding: 16px;
   }
 
@@ -691,45 +750,30 @@ body.puzzle-fullscreen-active {
   }
 
   .game-layout {
-    gap: 22px;
-    padding: 24px 16px;
-  }
-
-  .side-column {
-    grid-template-columns: 1fr;
-  }
-
-  h1 {
-    font-size: 36px;
-  }
-
-  .desktop-break {
-    display: none;
+    padding: 16px;
   }
 
   .board-card {
     padding: 16px;
   }
 
-  .board-card-header {
-    display: grid;
-    margin-bottom: 18px;
+  .header-controls {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
   }
 
-  .board-actions {
-    justify-content: stretch;
+  .header-button {
+    width: 42px;
+    padding: 0;
   }
 
-  .board-actions .outline-button:first-child {
-    flex: 1;
-  }
-
-  .board-subtitle {
-    margin-left: 0;
+  .header-button .button-label {
+    display: none;
   }
 
   .board-frame {
-    height: 520px;
+    height: min(590px, calc(100vh - 232px));
     border-radius: 12px;
   }
 
