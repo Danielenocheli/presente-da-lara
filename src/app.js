@@ -262,18 +262,11 @@ function getScatterPositions(width, height, geometry) {
   };
   const positions = [];
 
-  for (let top = padding; top <= height - geometry.cellHeight - padding; top += geometry.cellHeight + gapY) {
-    for (let left = padding; left <= width - geometry.cellWidth - padding; left += geometry.cellWidth + gapX) {
-      const right = left + geometry.cellWidth;
-      const bottom = top + geometry.cellHeight;
-      const overlapsGrid = right > protectedArea.left
-        && left < protectedArea.right
-        && bottom > protectedArea.top
-        && top < protectedArea.bottom;
+  const trayLeft = Math.max(protectedArea.right, padding);
 
-      if (!overlapsGrid) {
-        positions.push({ left, top });
-      }
+  for (let top = padding; top <= height - geometry.cellHeight - padding; top += geometry.cellHeight + gapY) {
+    for (let left = trayLeft; left <= width - geometry.cellWidth - padding; left += geometry.cellWidth + gapX) {
+      positions.push({ left, top });
     }
   }
 

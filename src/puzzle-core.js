@@ -80,7 +80,7 @@ export function getFittedGridGeometry(width, height, columns, rows, aspectRatio)
     cellHeight: targetHeight / rows,
     targetWidth,
     targetHeight,
-    left: (width - targetWidth) / 2,
+    left: isCompactBoard ? (width - targetWidth) / 2 : Math.max(24, width * 0.05),
     top: (height - targetHeight) / 2
   };
 }
