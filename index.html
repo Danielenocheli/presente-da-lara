@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-ancestors 'none'"
+    >
+    <title>Presente da Lara</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="gift-page">
+    <main class="gift-shell">
+      <section class="gift-main" aria-label="Presente da Lara">
+        <section id="gift-experience" class="gift-experience is-closed" aria-labelledby="gift-state-title">
+          <div class="gift-visual">
+            <div class="gift-image-wrap" aria-hidden="true">
+              <img
+                id="gift-image"
+                class="gift-image"
+                src="assets/presente-fechado.png"
+                alt=""
+              >
+              <span class="gift-glow"></span>
+            </div>
+            <p id="open-status" class="open-status" hidden>
+              <span aria-hidden="true">&#10003;</span> Presente aberto
+            </p>
+          </div>
+
+          <div id="closed-content" class="closed-content">
+            <p class="mini-label"><span aria-hidden="true">&#10070;</span> Uma surpresa especial</p>
+            <h2 id="gift-state-title">Um presente da Lara para você</h2>
+            <p>Tem uma mensagem especial esperando aqui dentro.</p>
+            <button id="open-gift" class="gift-primary" type="button">
+              <span aria-hidden="true">&#127873;</span>
+              Abrir presente
+            </button>
+          </div>
+
+          <article id="letter-area" class="letter-area" aria-labelledby="letter-title" aria-hidden="true">
+            <p id="letter-title" class="letter-label"><span aria-hidden="true">&#9993;</span> Uma cartinha da Lara</p>
+            <div class="letter-paper">
+              <span class="letter-coral letter-coral-top" aria-hidden="true"></span>
+              <span class="letter-coral letter-coral-bottom" aria-hidden="true"></span>
+              <p class="letter-heading">Feliz Dia dos Pais!</p>
+              <p>Eu sei que escrevi esta cartinha domingo, mas o que importa é o amor e não o dia.</p>
+              <p class="letter-closing">Feliz Dia dos Pais, te amo!</p>
+            </div>
+            <a class="gift-primary continue-button" href="jogo.html">
+              Continuar <span aria-hidden="true">&#8594;</span>
+            </a>
+          </article>
+
+          <p id="gift-live" class="sr-only" role="status" aria-live="polite"></p>
+          <footer class="gift-footer">
+            <p class="eyebrow gift-badge"><span aria-hidden="true">&#127873;</span> Presente da Lara</p>
+          </footer>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="src/presente.js"></script>
+  </body>
+</html>

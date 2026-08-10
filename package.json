@@ -1,0 +1,11 @@
+{
+  "name": "quebra-cabeca-dia-dos-pais",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/puzzle-core.test.mjs",
+    "serve": "python -m http.server 4173 --bind 127.0.0.1",
+    "screenshots": "node scripts/capture-screenshots.cjs"
+  }
+}

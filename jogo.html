@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-ancestors 'none'"
+    >
+    <title>Quebra-cabeça da Lara</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main id="app-shell" class="app-shell">
+      <header class="topbar" aria-label="Navegação e progresso">
+        <a class="back-link" href="index.html" aria-label="Voltar para a apresentação do presente">
+          <span aria-hidden="true">&#8592;</span> Voltar
+        </a>
+
+        <div class="stats" aria-label="Progresso do jogo">
+          <div class="stat-card">
+            <span class="puzzle-icon" aria-hidden="true">&#10070;</span>
+            <span><strong id="moves">0</strong><small>movimentos</small></span>
+          </div>
+          <div class="stat-card">
+            <span class="clock-icon" aria-hidden="true"></span>
+            <span><strong id="progress">0%</strong><small>concluído</small></span>
+          </div>
+        </div>
+      </header>
+
+      <section class="game-layout">
+        <aside class="side-column" aria-label="Informações e controles">
+          <div class="intro">
+            <p class="eyebrow"><span aria-hidden="true">&#127873;</span> Presente da Lara</p>
+            <h1 id="game-title">Monte a lembrança<br>mais especial!</h1>
+            <p class="intro-copy">
+              Organize as peças do quebra-cabeça e revele a foto<br class="desktop-break">
+              completa deste momento único.
+            </p>
+          </div>
+
+          <div class="panel controls">
+            <p class="panel-title">Sua foto de referência</p>
+            <img
+              class="preview"
+              src="assets/foto-papai-e-filha.jpeg"
+              alt="Foto de pai e filha sorrindo juntos"
+            >
+
+            <div class="field-group">
+              <label for="difficulty">Dificuldade</label>
+              <div class="select-wrap">
+                <span class="mini-puzzle" aria-hidden="true">&#10070;</span>
+                <select id="difficulty">
+                  <option value="50" selected>50 peças</option>
+                  <option value="100">100 peças</option>
+                  <option value="150">150 peças</option>
+                  <option value="200">200 peças</option>
+                </select>
+              </div>
+            </div>
+
+            <button id="shuffle" class="primary-button control-button" type="button">
+              <span aria-hidden="true">&#10070;</span>
+              <strong>Embaralhar peças</strong>
+              <span aria-hidden="true">&#8644;</span>
+            </button>
+            <button id="undo" class="secondary-button control-button" type="button" disabled>
+              <span aria-hidden="true">&#8630;</span>
+              <strong>Desfazer movimento</strong>
+              <span aria-hidden="true"></span>
+            </button>
+            <button id="hint" class="secondary-button control-button" type="button">
+              <span aria-hidden="true">&#8857;</span>
+              <strong>Mostrar foto completa</strong>
+              <span aria-hidden="true"></span>
+            </button>
+            <p id="game-status" class="helper" aria-live="polite">
+              <span aria-hidden="true">&#128161;</span>
+              <span><strong>Dica:</strong> Comece pelas bordas e cores<br>marcantes para montar mais rápido!</span>
+            </p>
+          </div>
+        </aside>
+
+        <section class="board-card" aria-label="Área do quebra-cabeça">
+          <div class="board-card-header">
+            <div>
+              <p class="board-title"><span aria-hidden="true">&#10070;</span> Monte seu quebra-cabeça</p>
+              <p class="board-subtitle">Arraste e encaixe as peças no tabuleiro.</p>
+            </div>
+            <div class="board-actions">
+              <button id="hint-board" class="outline-button" type="button">
+                Ver foto completa <span aria-hidden="true">&#8857;</span>
+              </button>
+              <button id="fullscreen" class="outline-button square-button" type="button" aria-label="Ativar tela cheia">
+                <span aria-hidden="true">&#9974;</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="board-frame">
+            <div id="board" class="board" role="group" aria-label="Quebra-cabeça">
+              <div class="photo-guide" aria-hidden="true"></div>
+            </div>
+            <div id="piece-feedback" class="piece-feedback" role="status" aria-live="polite" hidden>
+              Peça encaixada!
+            </div>
+            <div id="celebration" class="celebration" aria-hidden="true"></div>
+            <div id="complete-message" class="complete-message" role="status" aria-live="polite" hidden>
+              <h2>Feliz Dia dos Pais!</h2>
+              <p>Papai, eu te amo muito. Com carinho, Lara.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
